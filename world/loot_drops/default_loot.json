@@ -1,0 +1,50 @@
+[
+  {
+    "type": "Potion",
+    "name": "Big Health Potion",
+    "health_restore": 50,
+    "level": 3
+  },
+  {
+    "type": "Potion",
+    "name": "Medium Health Potion",
+    "health_restore": 35,
+    "level": 2
+  },
+  {
+    "type": "Potion",
+    "name": "Small Health Potion",
+    "health_restore": 20,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Sword",
+    "damage": 10,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Axe",
+    "damage": 15,
+    "level": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Spear",
+    "damage": 20,
+    "level": 3
+  },
+  {
+    "type": "Weapon",
+    "name": "Dagger",
+    "damage": 5,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Mace",
+    "damage": 24,
+    "level": 3
+  }
+]

@@ -1,0 +1,65 @@
+[
+  [
+    { "name": "Python's Throne", "enemy": true, "chest": true },
+    { "name": "Venom Pools", "enemy": true, "chest": false },
+    { "name": "Serpent Altar", "enemy": true, "chest": true },
+    { "name": "Scale Armory", "enemy": false, "chest": true },
+    { "name": "Fang Chamber", "enemy": true, "chest": false },
+    { "name": "Coil Sanctum", "enemy": true, "chest": true },
+    { "name": "Viper's Nest", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Corrupted Grove", "enemy": true, "chest": false },
+    { "name": "Shadow Den", "enemy": true, "chest": true },
+    { "name": "Poison Garden", "enemy": true, "chest": false },
+    { "name": "Dark Barracks", "enemy": true, "chest": false },
+    { "name": "Serpent Forge", "enemy": false, "chest": true },
+    { "name": "Slithering Passage", "enemy": true, "chest": false },
+    { "name": "Python's Treasury", "enemy": false, "chest": true }
+  ],
+  [
+    { "name": "Withered Orchard", "enemy": true, "chest": true },
+    { "name": "Abandoned Mill", "enemy": true, "chest": false },
+    { "name": "Blighted Fields", "enemy": true, "chest": false },
+    { "name": "Broken Bridge", "enemy": false, "chest": false },
+    { "name": "Cursed Well", "enemy": true, "chest": true },
+    { "name": "Twisted Path", "enemy": false, "chest": false },
+    { "name": "Thorn Thicket", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Shadowy Woods", "enemy": true, "chest": false },
+    { "name": "Hunter's Lodge", "enemy": true, "chest": true },
+    { "name": "Moonlit Clearing", "enemy": false, "chest": true },
+    { "name": "Village Well", "enemy": false, "chest": true },
+    { "name": "Elder's House", "enemy": false, "chest": true },
+    { "name": "Training Grounds", "enemy": false, "chest": true },
+    { "name": "Meadow Path", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Whispering Pines", "enemy": true, "chest": false },
+    { "name": "Rocky Outcrop", "enemy": false, "chest": false },
+    { "name": "Berry Grove", "enemy": false, "chest": true },
+    { "name": "Village Gate", "enemy": false, "chest": false },
+    { "name": "Farmstead", "enemy": true, "chest": true },
+    { "name": "Sheep Pasture", "enemy": false, "chest": false },
+    { "name": "Wildflower Field", "enemy": false, "chest": true }
+  ],
+  [
+    { "name": "Forest Entrance", "enemy": false, "chest": true },
+    { "name": "Babbling Brook", "enemy": false, "chest": false },
+    { "name": "Sunset Hill", "enemy": false, "chest": true },
+    { "name": "Village Outskirts", "enemy": false, "chest": false },
+    { "name": "Herb Garden", "enemy": false, "chest": true },
+    { "name": "Peaceful Pond", "enemy": false, "chest": false },
+    { "name": "Flowering Trees", "enemy": false, "chest": true }
+  ],
+  [
+    { "name": "Dark Forest Heart", "enemy": true, "chest": true },
+    { "name": "Misty Hollow", "enemy": true, "chest": false },
+    { "name": "Ancient Oak", "enemy": false, "chest": true },
+    { "name": "Village Square", "enemy": false, "chest": false },
+    { "name": "Market Place", "enemy": false, "chest": true },
+    { "name": "Old Watchtower", "enemy": true, "chest": false },
+    { "name": "Forest Edge", "enemy": true, "chest": false }
+  ]
+]
