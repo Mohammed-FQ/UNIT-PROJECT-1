@@ -165,3 +165,21 @@ Potions:
 ```json
 { "type": "Potion", "name": "Health Potion", "health_restore": 20, "level": 1 }
 ```
+
+## Gameplay Example
+
+### Player HUD:
+
+![Player HUD](visuals/hud.png)
+
+### Combat:
+
+![Combat](visuals/combat.png)
+
+### Victory Screen:
+
+![Victory Screen](visuals/victory.png)
+
+### Map Grid Visualization: (easy map)
+
+![easy map grid](visuals/map_grid_easy.png)
