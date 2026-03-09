@@ -1,0 +1,10 @@
+asciimatics==1.15.0
+colorama==0.4.6
+markdown-it-py==4.0.0
+mdurl==0.1.2
+pillow==12.1.1
+pyfiglet==1.0.4
+Pygments==2.19.2
+pywin32==311
+rich==14.3.3
+wcwidth==0.6.0

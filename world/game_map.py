@@ -1,6 +1,5 @@
 import json
 from random import choice
-
 from core.enemy import Enemy
 from systems.game_state import GAME_STATE
 from world.chest import Chest
