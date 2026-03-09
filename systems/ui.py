@@ -45,3 +45,14 @@ def ui_separator():
 def ui_spacer(lines=6):
     for _ in range(lines):
         ui_print("|  |  |   |   |", style="dim italic gray50")
+
+
+def print_enemy_health_bar(original_health, current_health):
+    """Print an enemy health bar in red."""
+    bar_length = 30
+    health_percentage = max(0, current_health / original_health)
+    filled = int(bar_length * health_percentage)
+    empty = bar_length - filled
+    
+    health_bar = "█" * filled + "░" * empty
+    ui_print(f"Enemy Health: [{health_bar}] {current_health}/{original_health}", style="bold red")

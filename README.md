@@ -6,13 +6,43 @@ Python Slayer is a command-line RPG built in Python. The player explores a grid-
 
 ## Features
 
-- Menu-driven gameplay with a clear command flow
-- Select map and loot files before starting a run
-- Grid movement: west, east, north, south
-- Turn-based combat with inventory access during fights
-- Chest and enemy loot collection
-- Weapon swapping and potion usage
-- Victory and defeat end screens
+### Core Gameplay
+
+- Move around a 2D grid map (north, south, east, west)
+- Fight enemies in turn-based combat
+- Find weapons and potions in chests or dropped from defeated enemies
+- Swap weapons and use potions in your inventory anytime
+- Enemies get tougher the farther you get from spawn
+
+### Customization
+
+- Pick from 3 maps (easy, default, hard)
+- Pick from 2 loot tables (default, overpowered)
+- Edit or add JSON files to create custom maps and items
+
+### UI & Visuals
+
+- Color-coded terminal interface using Rich library
+- ASCII animations when you win or lose
+- Live HUD showing health, weapon, location, enemies, and chests
+- Access inventory during combat
+
+### Goal
+
+- Defeat THE PYTHON to win and save the village
+
+## User Stories
+
+A Player should be able to,
+
+- Explore the map to find enemies, chests, and reach the final boss
+- Battle enemies strategically to survive
+- Collect better weapons and healing potions
+- Use inventory mid-combat to heal or swap weapons
+- Face tougher enemies as you move away from spawn
+- Choose different maps and loot tables for variety
+- Track game state easily with the HUD
+- Beat THE PYTHON to win the game
 
 ## Project Structure
 
@@ -37,7 +67,7 @@ Install dependencies:
 
 ```
 python -m venv gameEnv
-source gameEnv/Scripts/activate
+source gameEnv\Scripts\activate
 pip install -r requirements.txt
 python play_game.py
 ```
@@ -55,7 +85,7 @@ python3 play_game.py
 
 ## Controls
 
-#### giFor the best gameplay experience, run the CLI in full-screen mode.
+#### For the best gameplay experience, run the CLI in full-screen mode.
 
 Main Menu:
 
@@ -104,16 +134,26 @@ Included examples:
 - Loot: `default_loot.json`, `overpowered_loot.json`
 
 Map item format:
+Must include `THE PYTHON` by having his Throne as loction in the map. like so,
+
+```json
+{ "name": "Python's Throne", "enemy": true, "chest": false },
+```
+
+Other locations:
 
 ```json
 { "name": "Village Square", "enemy": false, "chest": false }
 ```
 
 Loot item format:
+Weapons:
 
 ```json
 { "type": "Weapon", "name": "Sword", "damage": 10, "level": 1 }
 ```
+
+Potions
 
 ```json
 { "type": "Potion", "name": "Health Potion", "health_restore": 20, "level": 1 }

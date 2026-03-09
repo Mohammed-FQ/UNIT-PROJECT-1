@@ -1,10 +1,11 @@
 from systems.game_state import GAME_STATE
 from systems.inventory import inventory_management
-from systems.ui import ui_header, ui_print, ui_spacer
+from systems.ui import ui_header, ui_print, ui_separator, ui_spacer, print_enemy_health_bar
 
 
 def fight():
     """Handle combat between the player and an enemy."""
+    max_enemy_health = GAME_STATE["current_location"].get_enemy().get_health()
     from systems.game_loop import print_hud
     
     player = GAME_STATE["player"]
@@ -16,6 +17,8 @@ def fight():
     ui_header(f"You encounter a {enemy.get_name()}!")
     while player.is_alive() and enemy.is_alive():
         print_hud()
+        print_enemy_health_bar(max_enemy_health, enemy.get_health())
+        ui_separator()          
         ui_print("1- Attack")
         ui_print("2- Open Inventory")
         action = input("Enter choice: ")
