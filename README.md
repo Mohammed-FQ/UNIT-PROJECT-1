@@ -35,11 +35,6 @@ Windows:
 python play_game.py
 ```
 
-Windows (included virtual environment):
-```bash
-gameEnv\Scripts\python.exe play_game.py
-```
-
 macOS/Linux:
 ```bash
 python3 play_game.py
