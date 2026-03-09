@@ -1,14 +1,20 @@
 import json
-from world.location import Location
-from core.enemy import Enemy
-from world.chest import Chest
 from random import choice
+
+from core.enemy import Enemy
 from systems.game_state import GAME_STATE
+from world.chest import Chest
+from world.location import Location
+
 
 class Game_Map:
     """Game map containing all locations and their connections."""
 
-    def __init__(self, map_file=GAME_STATE["game_map"], loot_data=GAME_STATE["loot_data"]):
+    def __init__(self, map_file=None, loot_data=None):
+        if map_file is None:
+            map_file = GAME_STATE["game_map"]
+        if loot_data is None:
+            loot_data = GAME_STATE["loot_data"]
         self.start_location = None
         self.locations = self.load_map(map_file, loot_data)
         self.current_location = self.start_location
@@ -30,7 +36,7 @@ class Game_Map:
                     enemy = Enemy("THE PYTHON", health=100, attack_power=20, loot=None)
                 else:
                     if cell["enemy"]:
-                        #random 50% that the enemy has loot
+                        # Random 50% chance that enemy has loot.
                         chance = choice([True, False])
 
                         if distance_from_start > 4:
@@ -52,12 +58,12 @@ class Game_Map:
                                 loot = None
                             enemy = Enemy("Lil Python", health=15, attack_power=5, loot=loot)
                 if cell["chest"]:
-                        if distance_from_start > 4:
-                            chest = Chest(level=3, loot_data=loot_data)
-                        elif distance_from_start > 2:
-                            chest = Chest(level=2, loot_data=loot_data)
-                        else:
-                            chest = Chest(level=1, loot_data=loot_data)
+                    if distance_from_start > 4:
+                        chest = Chest(level=3, loot_data=loot_data)
+                    elif distance_from_start > 2:
+                        chest = Chest(level=2, loot_data=loot_data)
+                    else:
+                        chest = Chest(level=1, loot_data=loot_data)
 
                 location = Location(name=cell["name"], chest=chest, enemy=enemy)
                 grid_row.append(location)
@@ -65,7 +71,7 @@ class Game_Map:
             distance_from_start -= 1
             grid.append(grid_row)
 
-        self.start_location = grid[len(grid)-1][len(grid[0])//2]
+        self.start_location = grid[len(grid) - 1][len(grid[0]) // 2]
         self.locations = grid
         self.connect_locations()
         return grid

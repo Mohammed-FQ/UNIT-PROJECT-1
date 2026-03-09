@@ -1,0 +1,50 @@
+[
+  {
+    "type": "Potion",
+    "name": "Tiny Potion",
+    "health_restore": 45,
+    "level": 1
+  },
+  {
+    "type": "Potion",
+    "name": "Major Potion",
+    "health_restore": 80,
+    "level": 2
+  },
+  {
+    "type": "Potion",
+    "name": "Ultimate Potion",
+    "health_restore": 150,
+    "level": 3
+  },
+  {
+    "type": "Weapon",
+    "name": "Titan Sword",
+    "damage": 35,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Dragon Axe",
+    "damage": 55,
+    "level": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "World Breaker Spear",
+    "damage": 90,
+    "level": 3
+  },
+  {
+    "type": "Weapon",
+    "name": "Storm Dagger",
+    "damage": 30,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Celestial Mace",
+    "damage": 95,
+    "level": 3
+  }
+]

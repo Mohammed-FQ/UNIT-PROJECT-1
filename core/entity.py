@@ -9,6 +9,7 @@ class Entity:
     def attack(self, target):
         """Apply this entity's attack power to target."""
         target.take_damage(self.attack_power)
+        return self.attack_power
 
     def take_damage(self, amount):
         """Reduce health but do not go below zero."""

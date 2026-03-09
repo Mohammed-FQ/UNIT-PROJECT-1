@@ -1,0 +1,65 @@
+[
+  [
+    { "name": "Python's Throne", "enemy": true, "chest": false },
+    { "name": "Golden Meadow", "enemy": false, "chest": false },
+    { "name": "Sunlit Ridge", "enemy": false, "chest": false },
+    { "name": "Cloud Terrace", "enemy": false, "chest": false },
+    { "name": "Calm Hollow", "enemy": false, "chest": false },
+    { "name": "Bright Orchard", "enemy": false, "chest": false },
+    { "name": "Silver Brook", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Moss Lane", "enemy": false, "chest": false },
+    { "name": "Willow Bend", "enemy": false, "chest": false },
+    { "name": "Farmer's Path", "enemy": false, "chest": false },
+    { "name": "Old Lantern Way", "enemy": false, "chest": false },
+    { "name": "Quiet Field", "enemy": false, "chest": false },
+    { "name": "Harvest Ground", "enemy": false, "chest": false },
+    { "name": "Gentle Rise", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Pine Crossing", "enemy": false, "chest": false },
+    { "name": "Fox Trail", "enemy": false, "chest": false },
+    { "name": "Clearwater Point", "enemy": false, "chest": false },
+    { "name": "Stone Marker", "enemy": false, "chest": false },
+    { "name": "Green Bend", "enemy": false, "chest": false },
+    { "name": "Traveler's Rest", "enemy": false, "chest": false },
+    { "name": "Hillside Steps", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "North Orchard", "enemy": false, "chest": false },
+    { "name": "River Boardwalk", "enemy": false, "chest": false },
+    { "name": "Village Well", "enemy": false, "chest": false },
+    { "name": "Central Garden", "enemy": false, "chest": false },
+    { "name": "Town Bakery", "enemy": false, "chest": false },
+    { "name": "School Yard", "enemy": false, "chest": false },
+    { "name": "South Orchard", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Dawn Pass", "enemy": false, "chest": false },
+    { "name": "Shepherd Trail", "enemy": false, "chest": false },
+    { "name": "Berry Grove", "enemy": false, "chest": false },
+    { "name": "Village Gate", "enemy": false, "chest": false },
+    { "name": "Farm House", "enemy": false, "chest": false },
+    { "name": "Watermill", "enemy": false, "chest": false },
+    { "name": "Flower Yard", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Forest Entrance", "enemy": false, "chest": false },
+    { "name": "Babbling Brook", "enemy": false, "chest": false },
+    { "name": "Sunset Hill", "enemy": false, "chest": false },
+    { "name": "Village Outskirts", "enemy": false, "chest": false },
+    { "name": "Herb Garden", "enemy": false, "chest": false },
+    { "name": "Peaceful Pond", "enemy": false, "chest": false },
+    { "name": "Flowering Trees", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Calm Grove", "enemy": false, "chest": false },
+    { "name": "Misty Hollow", "enemy": false, "chest": true },
+    { "name": "Ancient Oak", "enemy": false, "chest": false },
+    { "name": "Village Square", "enemy": false, "chest": false },
+    { "name": "Market Place", "enemy": false, "chest": false },
+    { "name": "Old Watchtower", "enemy": false, "chest": false },
+    { "name": "Forest Edge", "enemy": false, "chest": false }
+  ]
+]

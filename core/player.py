@@ -1,12 +1,17 @@
 from core.entity import Entity
+from core.weapon import Weapon
 
 
 class Player(Entity):
     """Main controllable hero with inventory and optional equipped weapon."""
 
-    def __init__(self, name="Hero", health=100, attack_power=5, equipment=None, inventory=[]):
+    def __init__(self, name="Hero", health=100, attack_power=5, equiped=None, inventory=None):
         super().__init__(name=name, health=health, attack_power=attack_power)
-        self.equiped_weapon = equipment
+        if equiped is None:
+            equiped = Weapon("Fist", 5)
+        if inventory is None:
+            inventory = []
+        self.equiped_weapon = equiped
         self.inventory = inventory
 
     def add_item(self, item):
