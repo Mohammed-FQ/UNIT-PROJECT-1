@@ -41,7 +41,7 @@ def build_victory_effects(screen):
         Stars(screen, (screen.width + screen.height) // 4),
         centered_print(screen, "PYTHON SLAYER", "small", max(1, screen.height // 2 -32), Screen.COLOUR_CYAN),
         centered_print(screen, "VICTORY!", "big", max(1, screen.height // 2), Screen.COLOUR_GREEN),
-        Mirage(screen, FigletText("Press any key", font="small"), max(1, screen.height // 2 + 30), Screen.COLOUR_GREEN),
+        Mirage(screen, FigletText("Press any key to continue", font="small"), max(1, screen.height // 2 + 20), Screen.COLOUR_GREEN),
     ]
 
     fireworks = [
@@ -75,7 +75,7 @@ def build_defeat_effects(screen):
         Snow(screen),
         centered_print(screen, "PYTHON SLAYER", "small", max(1, screen.height // 2 - 32), Screen.COLOUR_CYAN),
         centered_print(screen, "YOU DIED...", "big", max(1, screen.height // 2), Screen.COLOUR_RED),
-        Mirage(screen, FigletText("Press any key", font="small"), max(1, screen.height // 2 + 30), Screen.COLOUR_RED),
+        Mirage(screen, FigletText("Press any key to continue", font="small"), max(1, screen.height // 2 + 20), Screen.COLOUR_RED),
     ]
 
 
