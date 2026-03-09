@@ -1,7 +1,7 @@
 from random import choice, randint
 
 from asciimatics.effects import Mirage, Print, Snow, Stars
-from asciimatics.exceptions import StopApplication
+from asciimatics.exceptions import StopApplication, ResizeScreenError
 from asciimatics.particles import PalmFirework, RingFirework, SerpentFirework, StarFirework
 from asciimatics.renderers import FigletText
 from asciimatics.scene import Scene
@@ -15,9 +15,10 @@ def any_key(_event):
 
 def play_effects(screen, effects):
     """Play a single effect scene until any key is pressed."""
-    screen.play([Scene(effects, -1)], stop_on_resize=True, unhandled_input=any_key)
-
-
+    try:
+        screen.play([Scene(effects, -1)], stop_on_resize=True, unhandled_input=any_key)
+    except ResizeScreenError:
+        pass
 def open_and_play(build_effects):
     """Open a screen, render scene effects, and always close the screen."""
     screen = Screen.open()
@@ -25,7 +26,7 @@ def open_and_play(build_effects):
         effects = build_effects(screen)
         play_effects(screen, effects)
     except StopApplication:
-        pass
+        raise StopApplication("User requested exit from scene.")
     finally:
         screen.close()
 

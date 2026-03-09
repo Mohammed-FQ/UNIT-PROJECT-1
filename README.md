@@ -47,7 +47,7 @@ python play_game.py
 ```
 python3 -m venv gameEnv
 source gameEnv/bin/activate
-pip3 install -r requirements.txt
+pip3 install asciimatics rich
 python3 play_game.py
 ```
 
