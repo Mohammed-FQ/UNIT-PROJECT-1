@@ -29,7 +29,7 @@ Python Slayer is a command-line RPG built in Python. The player explores a grid-
 
 ### Goal
 
-- Defeat THE PYTHON to win and save the village
+- Slay `THE PYTHON` to win and save the village
 
 ## User Stories
 
@@ -59,7 +59,7 @@ A Player should be able to,
 - `rich`
 - `asciimatics`
 
-From the project root (`UNIT-PROJECT-1`):
+Run from the project root (`UNIT-PROJECT-1`):
 
 Install dependencies:
 
@@ -81,7 +81,7 @@ pip3 install asciimatics rich
 python3 play_game.py
 ```
 
-##### \*\*\* if you are havinng issues installing dependencies I only used rich and asciimatics
+##### \*\*\* if you are havinng issues installing dependencies I only used `rich` and `asciimatics`
 
 ## Controls
 
@@ -131,10 +131,10 @@ Content files are loaded from:
 Included examples:
 
 - Maps: `default_map.json`, `easy_map.json`, `hard_map.json`
-- Loot: `default_loot.json`, `overpowered_loot.json`
+- Loot Drops: `default_loot.json`, `overpowered_loot.json`
 
-Map item format:
-Must include `THE PYTHON` by having his Throne as loction in the map. like so,
+Maps File format:
+Must include `THE PYTHON` by having `Python's Throne` as a location in the map, like this:
 
 ```json
 { "name": "Python's Throne", "enemy": true, "chest": false },
@@ -146,14 +146,21 @@ Other locations:
 { "name": "Village Square", "enemy": false, "chest": false }
 ```
 
-Loot item format:
+Notes:
+
+- Map JSON must be a 2D list (list of rows).
+- Each cell must include: `name`, `enemy`, `chest`.
+- Keep all rows the same width (rectangular grid).
+- Include exactly one throne location named `Python's Throne` for the final boss.
+
+Loot Drops File format:
 Weapons:
 
 ```json
 { "type": "Weapon", "name": "Sword", "damage": 10, "level": 1 }
 ```
 
-Potions
+Potions:
 
 ```json
 { "type": "Potion", "name": "Health Potion", "health_restore": 20, "level": 1 }
