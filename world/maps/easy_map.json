@@ -1,17 +1,17 @@
 [
   [
     { "name": "Python's Throne", "enemy": true, "chest": false },
-    { "name": "Cloud Terrace", "enemy": false, "chest": false },
-    { "name": "Calm Hollow", "enemy": false, "chest": false }
+    { "name": "Cloud Terrace", "enemy": false, "chest": true },
+    { "name": "Calm Hollow", "enemy": false, "chest": true }
   ],
   [
     { "name": "Sunset Hill", "enemy": false, "chest": true },
-    { "name": "Village Outskirts", "enemy": false, "chest": false },
-    { "name": "Herb Garden", "enemy": false, "chest": false }
+    { "name": "Village Outskirts", "enemy": false, "chest": true },
+    { "name": "Herb Garden", "enemy": false, "chest": true }
   ],
   [
     { "name": "Ancient Oak", "enemy": false, "chest": true },
-    { "name": "Village Square", "enemy": false, "chest": false },
-    { "name": "Market Place", "enemy": false, "chest": false }
+    { "name": "Village Square", "enemy": false, "chest": true },
+    { "name": "Market Place", "enemy": true, "chest": true }
   ]
 ]
