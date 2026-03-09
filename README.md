@@ -14,12 +14,12 @@ Python Slayer is a command-line RPG built in Python. The player explores a grid-
 
 ## Project Structure
 - `play_game.py`: entry point
-- `core/`: entities (player, enemy, weapon, potion, loot)
+- `core/`: entity (player, enemy), loot (weapon, potion)
 - `systems/`: menus, game loop, combat, UI, game state
 - `world/`: map/chest/location logic + JSON data files
 
 ## Requirements
-- Python 3.10+ (3.11 recommended)
+- Python (3.11 recommended)
 - `rich`
 - `asciimatics`
 
