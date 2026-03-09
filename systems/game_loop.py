@@ -2,7 +2,7 @@
 from systems.combat import fight
 from systems.game_state import GAME_STATE
 from systems.inventory import inventory_management
-from systems.ui import ui_header, ui_print, ui_separator, ui_spacer
+from systems.ui import ui_header, ui_print, ui_separator, ui_spacer, print_player_health_bar
 from systems.animated_events import victory, defeat
 
 
@@ -17,10 +17,14 @@ def print_hud():
     ui_header(GAME_STATE["message"])
     ui_separator()
     ui_print(f"Location: {location.get_name()}", style="bold")
-    ui_print(f"Health: {GAME_STATE['player'].get_health()} | Weapon: {GAME_STATE['player'].get_equipped_weapon().get_name()}")
+    print()
+    print_player_health_bar(GAME_STATE["player"].get_health())
+    print()
+    ui_print(f"Equipped Weapon: {GAME_STATE['player'].get_equipped_weapon().get_name()}")
+    ui_print(f"Available Directions: {directions if directions else 'None'}")
+    print()
     ui_print(f"Enemy: {enemy_name}", style=enemy_style)
     ui_print(f"Chest: {chest_status}", style=chest_style)
-    ui_print(f"Directions: {directions if directions else 'None'}")
     ui_separator()
 
 
@@ -55,10 +59,10 @@ def move_player(direction):
 
 def can_move():
     if GAME_STATE["in_combat"]:
-        GAME_STATE["message"] = "You can't move while in combat!"
+        GAME_STATE["message"] = "You can't move while Enemy is present! must defeat the enemy first."
         return False
     elif GAME_STATE["chest_available"]:
-        GAME_STATE["message"] = "Open the chest first before moving."
+        GAME_STATE["message"] = "Open the chest first before moving. must open the chest first before moving."
         return False
     else:
         return True

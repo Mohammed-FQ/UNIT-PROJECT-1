@@ -56,3 +56,14 @@ def print_enemy_health_bar(original_health, current_health):
     
     health_bar = "█" * filled + "░" * empty
     ui_print(f"Enemy Health: [{health_bar}] {current_health}/{original_health}", style="bold red")
+
+
+def print_player_health_bar(current_health, max_health=100):
+    """Print a player health bar in green."""
+    bar_length = 30
+    health_percentage = max(0, min(1, current_health / max_health))
+    filled = int(bar_length * health_percentage)
+    empty = bar_length - filled
+
+    health_bar = "█" * filled + "░" * empty
+    ui_print(f"Player Health: [{health_bar}] {current_health}/{max_health}", style="bold green")

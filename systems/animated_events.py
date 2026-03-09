@@ -55,7 +55,7 @@ def build_victory_effects(screen):
         (SerpentFirework, 30, 35),
     ]
 
-    for _ in range(20):
+    for _ in range(50):
         firework, start, stop = choice(fireworks)
         effects.insert(
             1,
