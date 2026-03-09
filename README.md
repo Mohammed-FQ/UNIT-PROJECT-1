@@ -3,40 +3,43 @@
 ## Project Summary
 Python Slayer is a command-line RPG built in Python. The player explores a grid-based world, collects loot, manages inventory, fights enemies, and wins by defeating `THE PYTHON`.
 
-The project is structured with modular packages:
-- `core/`: player, enemies, and loot entities
-- `systems/`: game loop, menus, combat, inventory, and game state
-- `world/`: map loading, locations, chests, and JSON content files
+## Features
+- Menu-driven gameplay with a clear command flow
+- Select map and loot files before starting a run
+- Grid movement: west, east, north, south
+- Turn-based combat with inventory access during fights
+- Chest and enemy loot collection
+- Weapon swapping and potion usage
+- Victory and defeat end screens
 
-## Implemented Features
-- Main menu and start menu flow
-- Map and loot-file selection before game start
-- Grid movement (north, south, east, west)
-- Rich CLI HUD and formatted gameplay output
-- Chest interaction and loot collection
-- Inventory actions (equip weapon, use potion)
-- Turn-based combat with in-combat inventory access
-- Victory/defeat handling and return to main menu
+## Project Structure
+- `play_game.py`: entry point
+- `core/`: entities (player, enemy, weapon, potion, loot)
+- `systems/`: menus, game loop, combat, UI, game state
+- `world/`: map/chest/location logic + JSON data files
 
 ## Requirements
 - Python 3.10+ (3.11 recommended)
 - `rich`
+- `asciimatics`
 
 Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run
-Run from the project root (`UNIT-PROJECT-1`).
+## Quick Start
+From the project root (`UNIT-PROJECT-1`):
 
-Windows:
-```bash
+### Windows
+```
+pip install -r requirements.txt
 python play_game.py
 ```
 
-macOS/Linux:
-```bash
+### macOS/Linux
+```
+pip3 install -r requirements.txt
 python3 play_game.py
 ```
 
