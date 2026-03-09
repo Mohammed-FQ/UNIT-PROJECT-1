@@ -62,7 +62,7 @@ def can_move():
         GAME_STATE["message"] = "You can't move while Enemy is present! must defeat the enemy first."
         return False
     elif GAME_STATE["chest_available"]:
-        GAME_STATE["message"] = "Open the chest first before moving. must open the chest first before moving."
+        GAME_STATE["message"] = "Open the chest first before moving."
         return False
     else:
         return True

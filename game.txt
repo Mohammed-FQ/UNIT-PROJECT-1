@@ -1,0 +1,1563 @@
+PROJECT CONTENT SUMMARY
+Generated on: 2026-03-09
+
+This file is a combined export of project files from UNIT-PROJECT-1.
+Total files included: 27
+
+List of files:
+- core/__init__.py
+- core/enemy.py
+- core/entity.py
+- core/loot.py
+- core/player.py
+- core/potion.py
+- core/weapon.py
+- play_game.py
+- README.md
+- requirements.txt
+- systems/__init__.py
+- systems/animated_events.py
+- systems/combat.py
+- systems/game_loop.py
+- systems/game_state.py
+- systems/inventory.py
+- systems/menus.py
+- systems/ui.py
+- world/__init__.py
+- world/chest.py
+- world/game_map.py
+- world/location.py
+- world/loot_drops/default_loot.json
+- world/loot_drops/overpowered_loot.json
+- world/maps/default_map.json
+- world/maps/easy_map.json
+- world/maps/hard_map.json
+
+Each section includes:
+- File Name: the file name
+- Location: the full file path
+- Relative Path: the path from the project root
+- File content below the separator line
+
+============================================================
+File Name: __init__.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/__init__.py
+Relative Path: core/__init__.py
+------------------------------------------------------------
+
+
+============================================================
+File Name: enemy.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/enemy.py
+Relative Path: core/enemy.py
+------------------------------------------------------------
+from core.entity import Entity
+
+
+class Enemy(Entity):
+    """Combat entity that holds a single loot drop."""
+
+    def __init__(self, name, health, attack_power, loot=None):
+        super().__init__(name=name, health=health, attack_power=attack_power)
+        self.loot = loot
+
+    def drop_loot(self):
+        """Return item granted when this enemy is defeated."""
+        return self.loot
+    
+    def get_status(self):
+        loot_name = self.loot.name if self.loot else "None"
+        return f"{self.name}: Health={self.health}, Attack Power={self.attack_power}, Loot={loot_name}"
+
+============================================================
+File Name: entity.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/entity.py
+Relative Path: core/entity.py
+------------------------------------------------------------
+class Entity:
+    """Shared stats and combat helpers used by all living actors."""
+
+    def __init__(self, name="Unknown", health=0, attack_power=0):
+        self.name = name
+        self.health = health
+        self.attack_power = attack_power
+
+    def attack(self, target):
+        """Apply this entity's attack power to target."""
+        target.take_damage(self.attack_power)
+        return self.attack_power
+
+    def take_damage(self, amount):
+        """Reduce health but do not go below zero."""
+        self.health -= amount
+        if self.health < 0:
+            self.health = 0
+
+    def is_alive(self):
+        """Check if the entity is still alive."""
+        return self.health > 0
+    
+    def get_status(self):
+        """Get a string representation of the entity's current status."""
+        return f"{self.name}: Health={self.health}, Attack Power={self.attack_power}"
+    
+    """Getters for entity attributes."""
+    
+    def get_name(self):
+        return self.name
+
+    def get_health(self):
+        return self.health
+    
+    def get_attack_power(self):
+        return self.attack_power
+
+============================================================
+File Name: loot.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/loot.py
+Relative Path: core/loot.py
+------------------------------------------------------------
+class Loot:
+    """Simple item containing only a display name."""
+
+    def __init__(self, name):
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+============================================================
+File Name: player.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/player.py
+Relative Path: core/player.py
+------------------------------------------------------------
+from core.entity import Entity
+from core.weapon import Weapon
+
+
+class Player(Entity):
+    """Main controllable hero with inventory and optional equipped weapon."""
+
+    def __init__(self, name="Hero", health=100, attack_power=5, equiped=None, inventory=None):
+        super().__init__(name=name, health=health, attack_power=attack_power)
+        if equiped is None:
+            equiped = Weapon("Fist", 5)
+        if inventory is None:
+            inventory = []
+        self.equiped_weapon = equiped
+        self.inventory = inventory
+
+    def add_item(self, item):
+        """Add an item to inventory."""
+        self.inventory.append(item)
+
+    def remove_item(self, item):
+        """Remove an item from inventory if present."""
+        if item in self.inventory:
+            self.inventory.remove(item)
+
+    def equip_weapon(self, weapon):
+        """Equip weapon and update attack power to weapon damage."""
+        self.equiped_weapon = weapon
+        self.attack_power = weapon.damage
+
+    def heal(self, amount):
+        """Restore health up to max cap of 100."""
+        self.health += amount
+        if self.health > 100:
+            self.health = 100
+
+    def get_status(self):
+        weapon_name = self.equiped_weapon.name if self.equiped_weapon else "None"
+        return f"{self.name}: Health={self.health}, Attack Power={self.attack_power}, Equipped Weapon={weapon_name}"
+    
+    """Getters for player attributes."""
+    
+    def get_inventory(self):
+        return self.inventory
+    
+    def get_equipped_weapon(self):
+        return self.equiped_weapon
+    
+    def get_name(self):
+        return self.name
+
+============================================================
+File Name: potion.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/potion.py
+Relative Path: core/potion.py
+------------------------------------------------------------
+from core.loot import Loot
+
+
+class Potion(Loot):
+    """Loot that restores player health when consumed."""
+
+    def __init__(self, name, health_restore):
+        super().__init__(name)
+        self.health_restore = health_restore
+
+    def get_health_restore(self):
+        return self.health_restore
+
+============================================================
+File Name: weapon.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/core/weapon.py
+Relative Path: core/weapon.py
+------------------------------------------------------------
+from core.loot import Loot
+
+
+class Weapon(Loot):
+    """Loot that increases player attack when equipped."""
+
+    def __init__(self, name, damage):
+        super().__init__(name)
+        self.damage = damage
+
+    def get_damage(self):
+        return self.damage
+
+============================================================
+File Name: play_game.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/play_game.py
+Relative Path: play_game.py
+------------------------------------------------------------
+from systems.menus import main_menu
+
+
+def main():
+    main_menu()
+
+
+if __name__ == "__main__":
+    main()
+
+
+============================================================
+File Name: README.md
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/README.md
+Relative Path: README.md
+------------------------------------------------------------
+# Python Slayer
+
+## Project Summary
+
+Python Slayer is a command-line RPG built in Python. The player explores a grid-based world, collects loot, manages inventory, fights enemies, and wins by defeating `THE PYTHON`.
+
+## Features
+
+### Core Gameplay
+
+- Move around a 2D grid map (north, south, east, west)
+- Fight enemies in turn-based combat
+- Find weapons and potions in chests or dropped from defeated enemies
+- Swap weapons and use potions in your inventory anytime
+- Enemies get tougher the farther you get from spawn
+
+### Customization
+
+- Pick from 3 maps (easy, default, hard)
+- Pick from 2 loot tables (default, overpowered)
+- Edit or add JSON files to create custom maps and items
+
+### UI & Visuals
+
+- Color-coded terminal interface using Rich library
+- ASCII animations when you win or lose
+- Live HUD showing health, weapon, location, enemies, and chests
+- Access inventory during combat
+
+### Goal
+
+- Slay `THE PYTHON` to win and save the village
+
+## User Stories
+
+A Player should be able to,
+
+- Explore the map to find enemies, chests, and reach the final boss
+- Battle enemies strategically to survive
+- Collect better weapons and healing potions
+- Use inventory mid-combat to heal or swap weapons
+- Face tougher enemies as you move away from spawn
+- Choose different maps and loot tables for variety
+- Track game state easily with the HUD
+- Beat THE PYTHON to win the game
+
+## Project Structure
+
+- `play_game.py`: entry point
+- `core/`: entity (player, enemy), loot (weapon, potion)
+- `systems/`: menus, game loop, combat, UI, game state
+- `world/`: map/chest/location logic + JSON data files
+
+## Quick Start
+
+### Requirements
+
+- Python (3.11 recommended)
+- `rich`
+- `asciimatics`
+
+Run from the project root (`UNIT-PROJECT-1`):
+
+Install dependencies:
+
+### Windows
+
+```
+python -m venv gameEnv
+source gameEnv\Scripts\activate
+pip install -r requirements.txt
+python play_game.py
+```
+
+### macOS/Linux
+
+```
+python3 -m venv gameEnv
+source gameEnv/bin/activate
+pip3 install asciimatics rich
+python3 play_game.py
+```
+
+##### \*\*\* if you are havinng issues installing dependencies I only used `rich` and `asciimatics`
+
+## Controls
+
+#### For the best gameplay experience, run the CLI in full-screen mode.
+
+Main Menu:
+
+1. Start Game
+2. Exit
+
+Start Menu:
+
+1. Start New Game
+2. Change Map
+3. Change Loot Drops
+4. Back to Main Menu
+
+In Game:
+
+1. Move West
+2. Move East
+3. Move North
+4. Move South
+5. Open Inventory
+6. Open Chest
+7. Enter Combat
+8. Exit To Main Menu
+
+Combat:
+
+1. Attack
+2. Open Inventory
+
+Inventory:
+
+1. Change Weapon
+2. Use Potion
+3. Close Inventory
+
+## Custom Content
+
+Content files are loaded from:
+
+- Maps: `world/maps/`
+- Loot: `world/loot_drops/`
+
+Included examples:
+
+- Maps: `default_map.json`, `easy_map.json`, `hard_map.json`
+- Loot Drops: `default_loot.json`, `overpowered_loot.json`
+
+Maps File format:
+Must include `THE PYTHON` by having `Python's Throne` as a location in the map, like this:
+
+```json
+{ "name": "Python's Throne", "enemy": true, "chest": false },
+```
+
+Other locations:
+
+```json
+{ "name": "Village Square", "enemy": false, "chest": false }
+```
+
+Notes:
+
+- Map JSON must be a 2D list (list of rows).
+- Each cell must include: `name`, `enemy`, `chest`.
+- Keep all rows the same width (rectangular grid).
+- Include exactly one throne location named `Python's Throne` for the final boss.
+
+Loot Drops File format:
+Weapons:
+
+```json
+{ "type": "Weapon", "name": "Sword", "damage": 10, "level": 1 }
+```
+
+Potions:
+
+```json
+{ "type": "Potion", "name": "Health Potion", "health_restore": 20, "level": 1 }
+```
+
+
+============================================================
+File Name: requirements.txt
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/requirements.txt
+Relative Path: requirements.txt
+------------------------------------------------------------
+asciimatics==1.15.0
+colorama==0.4.6
+markdown-it-py==4.0.0
+mdurl==0.1.2
+pillow==12.1.1
+pyfiglet==1.0.4
+Pygments==2.19.2
+pywin32==311
+rich==14.3.3
+wcwidth==0.6.0
+
+
+============================================================
+File Name: __init__.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/__init__.py
+Relative Path: systems/__init__.py
+------------------------------------------------------------
+
+
+============================================================
+File Name: animated_events.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/animated_events.py
+Relative Path: systems/animated_events.py
+------------------------------------------------------------
+from random import choice, randint
+
+from asciimatics.effects import Mirage, Print, Snow, Stars
+from asciimatics.exceptions import StopApplication, ResizeScreenError
+from asciimatics.particles import PalmFirework, RingFirework, SerpentFirework, StarFirework
+from asciimatics.renderers import FigletText
+from asciimatics.scene import Scene
+from asciimatics.screen import Screen
+
+
+def any_key(_event):
+    """Exit current scene as soon as any key is pressed."""
+    raise StopApplication("User requested exit from scene.")
+
+
+def play_effects(screen, effects):
+    """Play a single effect scene until any key is pressed."""
+    try:
+        screen.play([Scene(effects, -1)], stop_on_resize=True, unhandled_input=any_key)
+    except ResizeScreenError:
+        pass
+def open_and_play(build_effects):
+    """Open a screen, render scene effects, and always close the screen."""
+    screen = Screen.open()
+    try:
+        effects = build_effects(screen)
+        play_effects(screen, effects)
+    except StopApplication:
+        raise StopApplication("User requested exit from scene.")
+    finally:
+        screen.close()
+
+
+def centered_print(screen, text, font, y, colour):
+    renderer = FigletText(text, font=font)
+    x = max(0, (screen.width - renderer.max_width) // 2)
+    return Print(screen, renderer, y, x=x, colour=colour)
+
+
+def build_victory_effects(screen):
+    effects = [
+        Stars(screen, (screen.width + screen.height) // 4),
+        centered_print(screen, "PYTHON SLAYER", "small", max(1, screen.height // 2 -32), Screen.COLOUR_CYAN),
+        centered_print(screen, "VICTORY!", "big", max(1, screen.height // 2), Screen.COLOUR_GREEN),
+        Mirage(screen, FigletText("Press any key to continue", font="small"), max(1, screen.height // 2 + 20), Screen.COLOUR_GREEN),
+    ]
+
+    fireworks = [
+        (PalmFirework, 25, 30),
+        (PalmFirework, 25, 30),
+        (StarFirework, 25, 35),
+        (StarFirework, 25, 35),
+        (StarFirework, 25, 35),
+        (RingFirework, 20, 30),
+        (SerpentFirework, 30, 35),
+    ]
+
+    for _ in range(50):
+        firework, start, stop = choice(fireworks)
+        effects.insert(
+            1,
+            firework(
+                screen,
+                randint(0, screen.width),
+                randint(screen.height // 8, screen.height * 3 // 4),
+                randint(start, stop),
+                start_frame=randint(0, 250),
+            ),
+        )
+
+    return effects
+
+
+def build_defeat_effects(screen):
+    return [
+        Snow(screen),
+        centered_print(screen, "PYTHON SLAYER", "small", max(1, screen.height // 2 - 32), Screen.COLOUR_CYAN),
+        centered_print(screen, "YOU DIED...", "big", max(1, screen.height // 2), Screen.COLOUR_RED),
+        Mirage(screen, FigletText("Press any key to continue", font="small"), max(1, screen.height // 2 + 20), Screen.COLOUR_RED),
+    ]
+
+
+def victory():
+    open_and_play(build_victory_effects)
+
+
+def defeat():
+    open_and_play(build_defeat_effects)
+
+============================================================
+File Name: combat.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/combat.py
+Relative Path: systems/combat.py
+------------------------------------------------------------
+from systems.game_state import GAME_STATE
+from systems.inventory import inventory_management
+from systems.ui import ui_header, ui_print, ui_separator, ui_spacer, print_enemy_health_bar
+
+
+def fight():
+    """Handle combat between the player and an enemy."""
+    max_enemy_health = GAME_STATE["current_location"].get_enemy().get_health()
+    from systems.game_loop import print_hud
+    
+    player = GAME_STATE["player"]
+    enemy = GAME_STATE["current_location"].get_enemy()
+    if enemy is None:
+        GAME_STATE["message"] = "No enemy in this location."
+        return True
+
+    ui_header(f"You encounter a {enemy.get_name()}!")
+    while player.is_alive() and enemy.is_alive():
+        print_hud()
+        print_enemy_health_bar(max_enemy_health, enemy.get_health())
+        ui_separator()          
+        ui_print("1- Attack")
+        ui_print("2- Open Inventory")
+        action = input("Enter choice: ")
+        ui_spacer()
+        if action == "1":
+            damage = player.attack(enemy)
+            ui_print(f"You attack the {enemy.get_name()} for {damage} damage! It has {enemy.get_health()} health left.", style="bold green")
+        elif action == "2":
+            GAME_STATE["in_inventory"] = True
+            inventory_management()
+            continue
+        else:
+            ui_print("Pick 1 to attack or 2 for inventory.", style="bold red")
+            continue
+
+        if enemy.is_alive():
+            damage = enemy.attack(player)
+            ui_print(f"The {enemy.get_name()} attacks you for {damage} damage! You have {player.get_health()} health left.", style="bold red")
+
+    if not player.is_alive():
+        GAME_STATE["defeat"] = True
+        GAME_STATE["message"] = "You were defeated. Game over."
+        return False
+
+    dropped_loot = enemy.drop_loot()
+    GAME_STATE["current_location"].remove_enemy()
+    GAME_STATE["in_combat"] = False
+
+    if dropped_loot is not None:
+        player.add_item(dropped_loot)
+        GAME_STATE["message"] = f"You defeated {enemy.get_name()} and got {dropped_loot.get_name()}!"
+    else:
+        GAME_STATE["message"] = f"You defeated {enemy.get_name()}!"
+
+    if enemy.get_name() == "THE PYTHON":
+        GAME_STATE["victory"] = True
+        GAME_STATE["message"] = "You defeated THE PYTHON and saved the village!"
+
+    return True
+
+
+============================================================
+File Name: game_loop.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/game_loop.py
+Relative Path: systems/game_loop.py
+------------------------------------------------------------
+
+from systems.combat import fight
+from systems.game_state import GAME_STATE
+from systems.inventory import inventory_management
+from systems.ui import ui_header, ui_print, ui_separator, ui_spacer, print_player_health_bar
+from systems.animated_events import victory, defeat
+
+
+def print_hud():
+    location = GAME_STATE["current_location"]
+    enemy_name = location.get_enemy().get_name() if GAME_STATE["in_combat"] else "None"
+    chest_status = "Available" if GAME_STATE["chest_available"] else "None"
+    directions = ", ".join(location.get_available_directions())
+    enemy_style = "bold red" if GAME_STATE["in_combat"] else None
+    chest_style = "bold yellow" if GAME_STATE["chest_available"] else None
+
+    ui_header(GAME_STATE["message"])
+    ui_separator()
+    ui_print(f"Location: {location.get_name()}", style="bold")
+    print()
+    print_player_health_bar(GAME_STATE["player"].get_health())
+    print()
+    ui_print(f"Equipped Weapon: {GAME_STATE['player'].get_equipped_weapon().get_name()}")
+    ui_print(f"Available Directions: {directions if directions else 'None'}")
+    print()
+    ui_print(f"Enemy: {enemy_name}", style=enemy_style)
+    ui_print(f"Chest: {chest_status}", style=chest_style)
+    ui_separator()
+
+
+def print_actions():
+    ui_print("1- Move West")
+    ui_print("2- Move East")
+    ui_print("3- Move North")
+    ui_print("4- Move South")
+    ui_print("5- Open Inventory")
+    ui_print("6- Open Chest")
+    ui_print("7- Enter Combat")
+    ui_print("8- Exit To Main Menu")
+
+
+def print_game_result():
+    if GAME_STATE["victory"]:
+        victory()
+        ui_spacer()
+    elif GAME_STATE["defeat"]:
+        defeat()
+        ui_spacer()
+
+def move_player(direction):
+    if can_move():
+        next_location = GAME_STATE["current_location"].move(direction)
+        if next_location:
+            GAME_STATE["current_location"] = next_location
+            GAME_STATE["message"] = f"You moved {direction} to {GAME_STATE['current_location'].get_name()}."
+        else:
+            GAME_STATE["message"] = f"You can't move {direction} from here."
+
+
+def can_move():
+    if GAME_STATE["in_combat"]:
+        GAME_STATE["message"] = "You can't move while Enemy is present! must defeat the enemy first."
+        return False
+    elif GAME_STATE["chest_available"]:
+        GAME_STATE["message"] = "Open the chest first before moving. must open the chest first before moving."
+        return False
+    else:
+        return True
+
+
+def game_loop():
+    """Main game loop that runs until victory or defeat."""
+    exited_to_menu = False
+
+    while not GAME_STATE["victory"] and not GAME_STATE["defeat"]:
+        GAME_STATE["chest_available"] = GAME_STATE["current_location"].has_chest()
+        GAME_STATE["in_combat"] = GAME_STATE["current_location"].has_enemy()
+        print_hud()
+        print_actions()
+        action = input("Enter choice: ")
+        ui_spacer()
+        if action == "1":
+            move_player("west")
+        elif action == "2":
+            move_player("east")
+        elif action == "3":
+            move_player("north")
+        elif action == "4":
+            move_player("south")
+        elif action == "5":
+            GAME_STATE["in_inventory"] = True
+            inventory_management()
+        elif action == "6":
+            if GAME_STATE["chest_available"]:
+                GAME_STATE["message"] = f"You opened the chest and found an item. Found {GAME_STATE['current_location'].get_chest().get_item().get_name()}"
+                GAME_STATE["player"].add_item(GAME_STATE["current_location"].get_chest().get_item())
+                GAME_STATE["current_location"].remove_chest()
+                GAME_STATE["chest_available"] = False
+            else:
+                GAME_STATE["message"] = "No chest here."
+        elif action == "7":
+            if GAME_STATE["in_combat"]:
+                fight()
+            else:
+                GAME_STATE["message"] = "No enemy here. Move to another location."
+        elif action == "8":
+            GAME_STATE["message"] = "Returning to main menu..."
+            exited_to_menu = True
+            break
+        else:
+            GAME_STATE["message"] = "I don't know that action. Pick a number from the menu."
+
+    if not exited_to_menu:
+        print_game_result()
+
+
+
+
+============================================================
+File Name: game_state.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/game_state.py
+Relative Path: systems/game_state.py
+------------------------------------------------------------
+def build_initial_game_state():
+    return {
+        "player": None,
+        "map_grid": None,
+        "message": "Welcome to the Game! Explore the map, defeat enemies, and find loot to slay The Python!",
+        "current_location": None,
+        "in_combat": False,
+        "in_inventory": False,
+        "victory": False,
+        "defeat": False,
+        "chest_available": False,
+        "game_map": "world/maps/default_map.json",
+        "loot_data": "world/loot_drops/default_loot.json"
+    }
+
+
+GAME_STATE = build_initial_game_state()
+
+def reset_game_state():
+    """Reset the game state to initial values."""
+    GAME_STATE.clear()
+    GAME_STATE.update(build_initial_game_state())
+
+============================================================
+File Name: inventory.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/inventory.py
+Relative Path: systems/inventory.py
+------------------------------------------------------------
+from core.potion import Potion
+from core.weapon import Weapon
+from systems.game_state import GAME_STATE
+from systems.ui import ui_header, ui_print, ui_separator, ui_spacer
+
+
+def print_inventory_header(player):
+    ui_header("Inventory")
+    ui_separator()
+    ui_print(f"Health: {player.get_health()} | Weapon: {player.get_equipped_weapon().get_name()}")
+    ui_print(f"Items: {[item.get_name() for item in player.get_inventory()]}")
+
+
+def inventory_management():
+    """Handle inventory management and chest interactions."""
+    player = GAME_STATE["player"]
+    while GAME_STATE["in_inventory"]:
+        potions = []
+        weapons = []
+        for item in player.get_inventory():
+            if isinstance(item, Potion):
+                potions.append(item)
+            elif isinstance(item, Weapon):
+                weapons.append(item)
+
+        print_inventory_header(player)
+        ui_print("1- Change Weapon")
+        ui_print("2- Use Potion")
+        ui_print("3- Close Inventory")
+        choice = input("Enter choice: ")
+        ui_spacer()
+        if choice == "1":
+            change_weapon(weapons, player)
+        elif choice == "2":
+            use_potion(potions, player)
+        elif choice == "3":
+            GAME_STATE["in_inventory"] = False
+            break
+        else:
+            ui_print("Pick 1, 2, or 3.", style="bold red")
+
+
+def change_weapon(weapons, player):
+    while True:
+        if not weapons:
+            ui_print("You don't have any spare weapons yet.", style="yellow")
+            break
+        for idx, weapon in enumerate(weapons):
+            ui_print(f"{idx + 1}- {weapon.get_name()} (Damage: {weapon.get_damage()})")
+        weapon_choice = input("Select a weapon to equip or q to exit: ")
+        ui_spacer()
+        if weapon_choice.lower() == "q":
+            break
+        elif weapon_choice.isdigit() and 1 <= int(weapon_choice) <= len(weapons):
+            selected_weapon = weapons[int(weapon_choice) - 1]
+            current_weapon = player.get_equipped_weapon()
+            player.equip_weapon(selected_weapon)
+            player.remove_item(selected_weapon)
+            player.add_item(current_weapon)
+            ui_print(f"Equipped {selected_weapon.get_name()}.", style="bold green")
+            break
+        else:
+            ui_print("That weapon number is not valid.", style="bold red")
+
+
+def use_potion(potions, player):
+    while True:
+        if not potions:
+            ui_print("No potions left in your bag.", style="yellow")
+            break
+        for idx, potion in enumerate(potions):
+            ui_print(f"{idx + 1}- {potion.get_name()} (Heal: {potion.get_health_restore()})")
+        potion_choice = input("Select a potion to use or q to exit: ")
+        ui_spacer()
+        if potion_choice.lower() == "q":
+            break
+        elif potion_choice.isdigit() and 1 <= int(potion_choice) <= len(potions):
+            selected_potion = potions[int(potion_choice) - 1]
+            player.heal(selected_potion.get_health_restore())
+            player.remove_item(selected_potion)
+            ui_print(f"Used {selected_potion.get_name()}.", style="bold green")
+            break
+        else:
+            ui_print("That potion number is not valid.", style="bold red")
+
+
+============================================================
+File Name: menus.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/menus.py
+Relative Path: systems/menus.py
+------------------------------------------------------------
+import os
+
+from core.player import Player
+from systems.game_loop import game_loop
+from systems.game_state import GAME_STATE, reset_game_state
+from systems.ui import ui_header, ui_print, ui_spacer
+from world.game_map import Game_Map
+
+
+def print_menu_header(title):
+    ui_header(title)
+
+
+def main_menu():
+    while True:
+        print_menu_header("Welcome")
+        ui_print("1. Start Game")
+        ui_print("2. Exit")
+        choice = input("Enter choice: ")
+        ui_spacer()
+        if choice == "1":
+            reset_game_state()
+            should_start = start_menu()
+            if not should_start:
+                continue
+            player = Player()
+            map_grid = Game_Map()
+            GAME_STATE["player"] = player
+            GAME_STATE["map_grid"] = map_grid
+            GAME_STATE["current_location"] = map_grid.get_start_location()
+
+            game_loop()
+            continue
+        elif choice == "2":
+            break
+        else:
+            ui_print("That option is not valid, try again.", style="bold red")
+
+def start_menu():
+    print_menu_header("Start Menu")
+    while True:
+        ui_print("1. Start New Game")
+        ui_print("2. Change Map")
+        ui_print("3. Change Loot Drops")
+        ui_print("4. Back to Main Menu")
+        choice = input("Enter choice: ")
+        ui_spacer()
+        if choice == "1":
+            return True
+        elif choice == "2":
+            maps()
+        elif choice == "3":
+            loot_drops()
+        elif choice == "4":
+            return False
+        else:
+            ui_print("Pick a number from 1 to 4.", style="bold red")
+
+def maps():
+    ui_header("Change Map")
+    folder_path = "world/maps/"
+    file_maps = os.listdir(folder_path)
+    ui_print("Available Maps:", style="bold cyan")
+    for index, file in enumerate(file_maps, 1):
+        ui_print(f"{index}. {file}")
+    choice = input("Enter the number of the map you want to use: ")
+    ui_spacer()
+    try:
+        selected_map = file_maps[int(choice) - 1]
+        GAME_STATE["game_map"] = os.path.join(folder_path, selected_map)
+        ui_print(f"Selected map: {selected_map}", style="bold green")
+    except (IndexError, ValueError):
+        ui_print("Map selection failed. Choose a number from the list.", style="bold red")
+
+
+
+def loot_drops():
+    ui_header("Change Loot Drops")
+    folder_path = "world/loot_drops/"
+    file_loot = os.listdir(folder_path)
+    ui_print("Available Loot Files:", style="bold cyan")
+    for index, file in enumerate(file_loot, 1):
+        ui_print(f"{index}. {file}")
+    choice = input("Enter the number of the loot drops file you want to use: ")
+    ui_spacer()
+    try:
+        selected_loot = file_loot[int(choice) - 1]
+        GAME_STATE["loot_data"] = os.path.join(folder_path, selected_loot)
+        ui_print(f"Selected loot file: {selected_loot}", style="bold green")
+    except (IndexError, ValueError):
+        ui_print("Loot selection failed. Choose a number from the list.", style="bold red")
+
+============================================================
+File Name: ui.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/systems/ui.py
+Relative Path: systems/ui.py
+------------------------------------------------------------
+try:
+    from rich.console import Console
+    from rich.panel import Panel
+
+    console = Console()
+    RICH_AVAILABLE = True
+except ImportError:
+    console = None
+    RICH_AVAILABLE = False
+
+
+def ui_print(text="", style=None):
+    if RICH_AVAILABLE:
+        if style:
+            console.print(text, style=style)
+        else:
+            console.print(text)
+    else:
+        print(text)
+
+
+def ui_header(title):
+    if RICH_AVAILABLE:
+        console.print(Panel.fit(f"[bold]{title}[/bold]", border_style="cyan"))
+    else:
+        print("\n" + "=" * 46)
+        print(title)
+        print("=" * 46)
+
+
+def ui_section(title):
+    if RICH_AVAILABLE:
+        console.print(f"\n[bold cyan]{title}[/bold cyan]")
+    else:
+        print("\n" + title)
+
+
+def ui_separator():
+    if RICH_AVAILABLE:
+        console.print("[dim]" + "-" * 46 + "[/dim]")
+    else:
+        print("-" * 46)
+
+
+def ui_spacer(lines=6):
+    for _ in range(lines):
+        ui_print("|  |  |   |   |", style="dim italic gray50")
+
+
+def print_enemy_health_bar(original_health, current_health):
+    """Print an enemy health bar in red."""
+    bar_length = 30
+    health_percentage = max(0, current_health / original_health)
+    filled = int(bar_length * health_percentage)
+    empty = bar_length - filled
+    
+    health_bar = "█" * filled + "░" * empty
+    ui_print(f"Enemy Health: [{health_bar}] {current_health}/{original_health}", style="bold red")
+
+
+def print_player_health_bar(current_health, max_health=100):
+    """Print a player health bar in green."""
+    bar_length = 30
+    health_percentage = max(0, min(1, current_health / max_health))
+    filled = int(bar_length * health_percentage)
+    empty = bar_length - filled
+
+    health_bar = "█" * filled + "░" * empty
+    ui_print(f"Player Health: [{health_bar}] {current_health}/{max_health}", style="bold green")
+
+
+============================================================
+File Name: __init__.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/__init__.py
+Relative Path: world/__init__.py
+------------------------------------------------------------
+
+
+============================================================
+File Name: chest.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/chest.py
+Relative Path: world/chest.py
+------------------------------------------------------------
+import json
+from random import choices
+
+from core.potion import Potion
+from core.weapon import Weapon
+from systems.game_state import GAME_STATE
+
+class Chest:
+    """Chest that rolls exactly one loot item at creation time."""
+
+    def __init__(self, level=1, loot_data=None):
+        if loot_data is None:
+            loot_data = GAME_STATE["loot_data"]
+        self.level = level
+        self.loot = self.generate_loot(loot_data)
+
+    def get_item(self):
+        """Return chest loot item."""
+        return self.loot
+
+    def get_level(self):
+        """Get the level of this chest."""
+        return self.level
+
+    def generate_loot(self, loot_data_j):
+        with open(loot_data_j, 'r') as f:
+            loot_data = json.load(f)
+
+        weights = []
+        for item in loot_data:
+            if item["level"] == self.level:
+                weight = 10
+            else:
+                weight = 3
+            weights.append(weight)
+
+        selected_loot = choices(loot_data, weights=weights, k=1)[0]
+
+        # Convert dictionary → object
+        if selected_loot["type"] == "Potion":
+            return Potion(
+                selected_loot["name"],
+                selected_loot["health_restore"]
+            )
+
+        elif selected_loot["type"] == "Weapon":
+            return Weapon(
+                selected_loot["name"],
+                selected_loot["damage"]
+            )
+
+============================================================
+File Name: game_map.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/game_map.py
+Relative Path: world/game_map.py
+------------------------------------------------------------
+import json
+from random import choice
+from core.enemy import Enemy
+from systems.game_state import GAME_STATE
+from world.chest import Chest
+from world.location import Location
+
+
+class Game_Map:
+    """Game map containing all locations and their connections."""
+
+    def __init__(self, map_file=None, loot_data=None):
+        if map_file is None:
+            map_file = GAME_STATE["game_map"]
+        if loot_data is None:
+            loot_data = GAME_STATE["loot_data"]
+        self.start_location = None
+        self.locations = self.load_map(map_file, loot_data)
+        self.current_location = self.start_location
+
+    def load_map(self, map_file, loot_data):
+        """Load map data from JSON file and create Location instances."""
+        with open(map_file, 'r') as f:
+            map_data = json.load(f)
+
+        grid = []
+        distance_from_start = len(map_data)
+
+        for row in map_data:
+            grid_row = []
+            for cell in row:
+                chest = None
+                enemy = None
+                if cell["name"] == "Python's Throne":
+                    enemy = Enemy("THE PYTHON", health=100, attack_power=20, loot=None)
+                else:
+                    if cell["enemy"]:
+                        # Random 50% chance that enemy has loot.
+                        chance = choice([True, False])
+
+                        if distance_from_start > 4:
+                            if chance:
+                                loot = Chest(level=3, loot_data=loot_data).get_item()
+                            else:
+                                loot = None
+                            enemy = Enemy("Giant Python", health=30, attack_power=10, loot=loot)
+                        elif distance_from_start > 2:
+                            if chance:
+                                loot = Chest(level=2, loot_data=loot_data).get_item()
+                            else:
+                                loot = None
+                            enemy = Enemy("Medium Python", health=20, attack_power=7, loot=loot)
+                        else:
+                            if chance:
+                                loot = Chest(level=1, loot_data=loot_data).get_item()
+                            else:
+                                loot = None
+                            enemy = Enemy("Lil Python", health=15, attack_power=5, loot=loot)
+                if cell["chest"]:
+                    if distance_from_start > 4:
+                        chest = Chest(level=3, loot_data=loot_data)
+                    elif distance_from_start > 2:
+                        chest = Chest(level=2, loot_data=loot_data)
+                    else:
+                        chest = Chest(level=1, loot_data=loot_data)
+
+                location = Location(name=cell["name"], chest=chest, enemy=enemy)
+                grid_row.append(location)
+
+            distance_from_start -= 1
+            grid.append(grid_row)
+
+        self.start_location = grid[len(grid) - 1][len(grid[0]) // 2]
+        self.locations = grid
+        self.connect_locations()
+        return grid
+
+    def connect_locations(self):
+        """Set north/south/east/west neighbors for all locations based on grid position."""
+        for i in range(len(self.locations)):
+            for j in range(len(self.locations[i])):
+                location = self.locations[i][j]
+                if i > 0:
+                    location.north = self.locations[i-1][j]
+                if i < len(self.locations) - 1:
+                    location.south = self.locations[i+1][j]
+                if j > 0:
+                    location.west = self.locations[i][j-1]
+                if j < len(self.locations[i]) - 1:
+                    location.east = self.locations[i][j+1]
+
+    def get_start_location(self):
+        """Return the starting location for the player."""
+        return self.start_location
+
+    def get_grid(self):
+        """Return the 2D grid of locations."""
+        return self.locations
+
+    def set_current_location(self, row, col):
+        """Set the current location to the location at the specified grid position."""
+        if 0 <= row < len(self.locations) and 0 <= col < len(self.locations[0]):
+            self.current_location = self.locations[row][col]
+        else:
+            raise ValueError(f"Invalid location position: ({row}, {col})")
+
+    def get_location_position(self, location):
+        """Get the grid position (row, col) of a given location."""
+        for i, row in enumerate(self.locations):
+            for j, loc in enumerate(row):
+                if loc == location:
+                    return (i, j)
+        return None
+
+    def move_player(self, direction):
+        """Move the player in the specified direction. Returns True if successful, False otherwise."""
+        if self.current_location is None:
+            return False
+
+        next_location = self.current_location.move(direction)
+        if next_location is not None:
+            self.current_location = next_location
+            return True
+        return False
+
+
+
+
+============================================================
+File Name: location.py
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/location.py
+Relative Path: world/location.py
+------------------------------------------------------------
+class Location:
+    """A single navigable location with optional chest/enemy and neighbors."""
+
+    def __init__(self, name, north=None, south=None, east=None, west=None, chest=None, enemy=None, level=1):
+        self.name = name
+        self.north = north
+        self.south = south
+        self.east = east
+        self.west = west
+        self.chest = chest
+        self.enemy = enemy
+        self.level = level
+
+    def move(self, direction):
+        """Return neighboring location in the requested direction."""
+        if direction == "north":
+            return self.north
+        elif direction == "south":
+            return self.south
+        elif direction == "east":
+            return self.east
+        elif direction == "west":
+            return self.west
+        return None
+
+    def get_enemy(self):
+        """Get the enemy at this location."""
+        return self.enemy
+
+    def get_chest(self):
+        """Get the chest at this location."""
+        return self.chest
+
+    def get_name(self):
+        """Get the name of this location."""
+        return self.name
+
+    def get_level(self):
+        """Get the level of this location."""
+        return self.level
+
+    def has_enemy(self):
+        """Check if this location has an enemy."""
+        return self.enemy is not None
+
+    def has_chest(self):
+        """Check if this location has a chest."""
+        return self.chest is not None
+
+    def remove_enemy(self):
+        """Remove the enemy from this location."""
+        self.enemy = None
+
+    def remove_chest(self):
+        """Remove the chest from this location."""
+        self.chest = None
+
+    def get_available_directions(self):
+        """List valid movement directions from this location."""
+        directions = []
+        if self.north:
+            directions.append("north")
+        if self.south:
+            directions.append("south")
+        if self.east:
+            directions.append("east")
+        if self.west:
+            directions.append("west")
+        return directions
+
+============================================================
+File Name: default_loot.json
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/loot_drops/default_loot.json
+Relative Path: world/loot_drops/default_loot.json
+------------------------------------------------------------
+[
+  {
+    "type": "Potion",
+    "name": "Big Health Potion",
+    "health_restore": 50,
+    "level": 3
+  },
+  {
+    "type": "Potion",
+    "name": "Medium Health Potion",
+    "health_restore": 35,
+    "level": 2
+  },
+  {
+    "type": "Potion",
+    "name": "Small Health Potion",
+    "health_restore": 20,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Sword",
+    "damage": 10,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Axe",
+    "damage": 15,
+    "level": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Spear",
+    "damage": 20,
+    "level": 3
+  },
+  {
+    "type": "Weapon",
+    "name": "Dagger",
+    "damage": 7,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Mace",
+    "damage": 24,
+    "level": 3
+  }
+]
+
+
+============================================================
+File Name: overpowered_loot.json
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/loot_drops/overpowered_loot.json
+Relative Path: world/loot_drops/overpowered_loot.json
+------------------------------------------------------------
+[
+  {
+    "type": "Potion",
+    "name": "Tiny Potion",
+    "health_restore": 45,
+    "level": 1
+  },
+  {
+    "type": "Potion",
+    "name": "Major Potion",
+    "health_restore": 80,
+    "level": 2
+  },
+  {
+    "type": "Potion",
+    "name": "Ultimate Potion",
+    "health_restore": 150,
+    "level": 3
+  },
+  {
+    "type": "Weapon",
+    "name": "Titan Sword",
+    "damage": 35,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Dragon Axe",
+    "damage": 55,
+    "level": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "World Breaker Spear",
+    "damage": 90,
+    "level": 3
+  },
+  {
+    "type": "Weapon",
+    "name": "Storm Dagger",
+    "damage": 30,
+    "level": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Celestial Mace",
+    "damage": 95,
+    "level": 3
+  }
+]
+
+
+============================================================
+File Name: default_map.json
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/maps/default_map.json
+Relative Path: world/maps/default_map.json
+------------------------------------------------------------
+[
+  [
+    { "name": "Python's Throne", "enemy": true, "chest": false },
+    { "name": "Venom Pools", "enemy": true, "chest": false },
+    { "name": "Serpent Altar", "enemy": true, "chest": true },
+    { "name": "Scale Armory", "enemy": false, "chest": true },
+    { "name": "Fang Chamber", "enemy": true, "chest": false },
+    { "name": "Coil Sanctum", "enemy": true, "chest": true },
+    { "name": "Viper's Nest", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Corrupted Grove", "enemy": true, "chest": false },
+    { "name": "Shadow Den", "enemy": true, "chest": true },
+    { "name": "Poison Garden", "enemy": true, "chest": false },
+    { "name": "Dark Barracks", "enemy": true, "chest": false },
+    { "name": "Serpent Forge", "enemy": false, "chest": true },
+    { "name": "Slithering Passage", "enemy": true, "chest": false },
+    { "name": "Python's Treasury", "enemy": false, "chest": true }
+  ],
+  [
+    { "name": "Withered Orchard", "enemy": true, "chest": true },
+    { "name": "Abandoned Mill", "enemy": true, "chest": false },
+    { "name": "Blighted Fields", "enemy": true, "chest": false },
+    { "name": "Broken Bridge", "enemy": false, "chest": false },
+    { "name": "Cursed Well", "enemy": true, "chest": true },
+    { "name": "Twisted Path", "enemy": false, "chest": false },
+    { "name": "Thorn Thicket", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Shadowy Woods", "enemy": true, "chest": false },
+    { "name": "Hunter's Lodge", "enemy": true, "chest": true },
+    { "name": "Moonlit Clearing", "enemy": false, "chest": true },
+    { "name": "Village Well", "enemy": false, "chest": true },
+    { "name": "Elder's House", "enemy": false, "chest": true },
+    { "name": "Training Grounds", "enemy": false, "chest": true },
+    { "name": "Meadow Path", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Whispering Pines", "enemy": true, "chest": false },
+    { "name": "Rocky Outcrop", "enemy": false, "chest": false },
+    { "name": "Berry Grove", "enemy": false, "chest": true },
+    { "name": "Village Gate", "enemy": false, "chest": false },
+    { "name": "Farmstead", "enemy": true, "chest": true },
+    { "name": "Sheep Pasture", "enemy": false, "chest": false },
+    { "name": "Wildflower Field", "enemy": false, "chest": true }
+  ],
+  [
+    { "name": "Forest Entrance", "enemy": false, "chest": true },
+    { "name": "Babbling Brook", "enemy": false, "chest": false },
+    { "name": "Sunset Hill", "enemy": false, "chest": true },
+    { "name": "Village Outskirts", "enemy": false, "chest": false },
+    { "name": "Herb Garden", "enemy": false, "chest": true },
+    { "name": "Peaceful Pond", "enemy": false, "chest": false },
+    { "name": "Flowering Trees", "enemy": false, "chest": true }
+  ],
+  [
+    { "name": "Dark Forest Heart", "enemy": true, "chest": true },
+    { "name": "Misty Hollow", "enemy": true, "chest": false },
+    { "name": "Ancient Oak", "enemy": false, "chest": true },
+    { "name": "Village Square", "enemy": false, "chest": false },
+    { "name": "Market Place", "enemy": false, "chest": true },
+    { "name": "Old Watchtower", "enemy": true, "chest": false },
+    { "name": "Forest Edge", "enemy": true, "chest": false }
+  ]
+]
+
+
+============================================================
+File Name: easy_map.json
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/maps/easy_map.json
+Relative Path: world/maps/easy_map.json
+------------------------------------------------------------
+[
+  [
+    { "name": "Python's Throne", "enemy": true, "chest": false },
+    { "name": "Cloud Terrace", "enemy": false, "chest": false },
+    { "name": "Calm Hollow", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Sunset Hill", "enemy": false, "chest": true },
+    { "name": "Village Outskirts", "enemy": false, "chest": false },
+    { "name": "Herb Garden", "enemy": false, "chest": false }
+  ],
+  [
+    { "name": "Ancient Oak", "enemy": false, "chest": true },
+    { "name": "Village Square", "enemy": false, "chest": false },
+    { "name": "Market Place", "enemy": false, "chest": false }
+  ]
+]
+
+
+============================================================
+File Name: hard_map.json
+Location: /c/Users/Mohammed/Desktop/tuwaiq/UNIT-PROJECT-1/world/maps/hard_map.json
+Relative Path: world/maps/hard_map.json
+------------------------------------------------------------
+[
+  [
+    { "name": "lil Python Throne", "enemy": true, "chest": false },
+    { "name": "Venom Pools", "enemy": true, "chest": false },
+    { "name": "Serpent Altar", "enemy": true, "chest": true },
+    { "name": "Scale Armory", "enemy": true, "chest": false },
+    { "name": "Fang Chamber", "enemy": true, "chest": false },
+    { "name": "Coil Sanctum", "enemy": true, "chest": true },
+    { "name": "Viper's Nest", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Corrupted Grove", "enemy": true, "chest": false },
+    { "name": "Shadow Den", "enemy": true, "chest": true },
+    { "name": "Poison Garden", "enemy": true, "chest": false },
+    { "name": "Dark Barracks", "enemy": true, "chest": false },
+    { "name": "Serpent Forge", "enemy": true, "chest": false },
+    { "name": "Slithering Passage", "enemy": true, "chest": false },
+    { "name": "Python's Treasury", "enemy": true, "chest": true }
+  ],
+  [
+    { "name": "Withered Orchard", "enemy": true, "chest": false },
+    { "name": "Abandoned Mill", "enemy": true, "chest": false },
+    { "name": "Blighted Fields", "enemy": true, "chest": false },
+    { "name": "Broken Bridge", "enemy": true, "chest": false },
+    { "name": "Cursed Well", "enemy": true, "chest": true },
+    { "name": "Twisted Path", "enemy": true, "chest": false },
+    { "name": "Thorn Thicket", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Shadowy Woods", "enemy": true, "chest": false },
+    { "name": "Hunter's Lodge", "enemy": true, "chest": false },
+    { "name": "Moonlit Clearing", "enemy": true, "chest": false },
+    { "name": "Village Well", "enemy": true, "chest": false },
+    { "name": "Elder's House", "enemy": true, "chest": false },
+    { "name": "Training Grounds", "enemy": true, "chest": false },
+    { "name": "Meadow Path", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Whispering Pines", "enemy": true, "chest": false },
+    { "name": "Rocky Outcrop", "enemy": true, "chest": false },
+    { "name": "Berry Grove", "enemy": true, "chest": true },
+    { "name": "Village Gate", "enemy": true, "chest": false },
+    { "name": "Farmstead", "enemy": true, "chest": false },
+    { "name": "Sheep Pasture", "enemy": true, "chest": false },
+    { "name": "Wildflower Field", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Forest Entrance", "enemy": true, "chest": false },
+    { "name": "Babbling Brook", "enemy": true, "chest": false },
+    { "name": "Sunset Hill", "enemy": true, "chest": false },
+    { "name": "Village Outskirts", "enemy": true, "chest": false },
+    { "name": "Herb Garden", "enemy": true, "chest": false },
+    { "name": "Peaceful Pond", "enemy": true, "chest": false },
+    { "name": "Flowering Trees", "enemy": true, "chest": false }
+  ],
+  [
+    { "name": "Dark Forest Heart", "enemy": true, "chest": false },
+    { "name": "Misty Hollow", "enemy": true, "chest": false },
+    { "name": "Python's Throne", "enemy": true, "chest": false },
+    { "name": "Village Square", "enemy": false, "chest": false },
+    { "name": "Market Place", "enemy": true, "chest": false },
+    { "name": "Old Watchtower", "enemy": true, "chest": false },
+    { "name": "Forest Edge", "enemy": true, "chest": false }
+  ]
+]
+
+
