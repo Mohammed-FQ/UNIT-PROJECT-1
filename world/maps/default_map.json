@@ -1,6 +1,6 @@
 [
   [
-    { "name": "Python's Throne", "enemy": true, "chest": true },
+    { "name": "Python's Throne", "enemy": true, "chest": false },
     { "name": "Venom Pools", "enemy": true, "chest": false },
     { "name": "Serpent Altar", "enemy": true, "chest": true },
     { "name": "Scale Armory", "enemy": false, "chest": true },

@@ -5,6 +5,8 @@ from systems.ui import ui_header, ui_print, ui_spacer
 
 def fight():
     """Handle combat between the player and an enemy."""
+    from systems.game_loop import print_hud
+    
     player = GAME_STATE["player"]
     enemy = GAME_STATE["current_location"].get_enemy()
     if enemy is None:
@@ -13,6 +15,7 @@ def fight():
 
     ui_header(f"You encounter a {enemy.get_name()}!")
     while player.is_alive() and enemy.is_alive():
+        print_hud()
         ui_print("1- Attack")
         ui_print("2- Open Inventory")
         action = input("Enter choice: ")

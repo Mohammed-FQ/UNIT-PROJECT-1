@@ -1,6 +1,6 @@
 [
   [
-    { "name": "Python's Throne", "enemy": true, "chest": true },
+    { "name": "lil Python Throne", "enemy": true, "chest": false },
     { "name": "Venom Pools", "enemy": true, "chest": false },
     { "name": "Serpent Altar", "enemy": true, "chest": true },
     { "name": "Scale Armory", "enemy": true, "chest": false },
@@ -56,7 +56,7 @@
   [
     { "name": "Dark Forest Heart", "enemy": true, "chest": false },
     { "name": "Misty Hollow", "enemy": true, "chest": false },
-    { "name": "Ancient Oak", "enemy": true, "chest": false },
+    { "name": "Python's Throne", "enemy": true, "chest": false },
     { "name": "Village Square", "enemy": false, "chest": false },
     { "name": "Market Place", "enemy": true, "chest": false },
     { "name": "Old Watchtower", "enemy": true, "chest": false },

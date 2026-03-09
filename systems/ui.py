@@ -42,6 +42,6 @@ def ui_separator():
         print("-" * 46)
 
 
-def ui_spacer(lines=2):
+def ui_spacer(lines=6):
     for _ in range(lines):
-        ui_print("")
+        ui_print("|  |  |   |   |", style="dim italic gray50")

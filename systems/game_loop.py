@@ -21,6 +21,7 @@ def print_hud():
     ui_print(f"Enemy: {enemy_name}", style=enemy_style)
     ui_print(f"Chest: {chest_status}", style=chest_style)
     ui_print(f"Directions: {directions if directions else 'None'}")
+    ui_separator()
 
 
 def print_actions():
@@ -37,8 +38,10 @@ def print_actions():
 def print_game_result():
     if GAME_STATE["victory"]:
         victory()
+        ui_spacer()
     elif GAME_STATE["defeat"]:
         defeat()
+        ui_spacer()
 
 def move_player(direction):
     if can_move():
@@ -85,10 +88,8 @@ def game_loop():
             inventory_management()
         elif action == "6":
             if GAME_STATE["chest_available"]:
-                GAME_STATE["message"] = "You opened the chest and found an item."
+                GAME_STATE["message"] = f"You opened the chest and found an item. Found {GAME_STATE['current_location'].get_chest().get_item().get_name()}"
                 GAME_STATE["player"].add_item(GAME_STATE["current_location"].get_chest().get_item())
-                ui_print(f"You found a {GAME_STATE['current_location'].get_chest().get_item().get_name()}", style="bold green")
-                ui_print(f"Inventory now: {[item.get_name() for item in GAME_STATE['player'].get_inventory()]}")
                 GAME_STATE["current_location"].remove_chest()
                 GAME_STATE["chest_available"] = False
             else:
