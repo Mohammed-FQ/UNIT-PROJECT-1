@@ -12,7 +12,7 @@ Python Slayer is a command-line RPG built in Python. The player explores a grid-
 - Fight enemies in turn-based combat
 - Find weapons and potions in chests or dropped from defeated enemies
 - Swap weapons and use potions in your inventory anytime
-- Enemies get tougher the farther you get from spawn
+- Enemies get tougher and better chance for better loot the farther you get from spawn
 
 ### Customization
 
